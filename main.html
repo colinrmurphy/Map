@@ -1,0 +1,412 @@
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>Annotated Map Tool</title>
+
+<link rel="stylesheet" href="css/stylesheet.css" type="text/css" />
+
+<script src="getCoords.js"></script>
+
+<script>
+	var xyarr = [];
+	var canvas, ctx;
+
+	
+			function init() {
+				
+					
+					document.getElementById('start').disabled = false;
+					document.getElementById('play').disabled = true;
+					document.getElementById('start').onclick = function(){
+						startRec();
+						
+					} ;
+				
+				}
+				
+				
+		function drawLines(){
+		ctx.clearRect(0,0,canvas.scrollWidth, canvas.scrollHeight);
+
+						if (xyarr.length > 1)
+						{
+
+							ctx.beginPath();
+
+							ctx.moveTo(xyarr[0].x, xyarr[0].y);
+
+							for (var i = 1; i <	xyarr.length; i++) {
+								drawLine(xyarr[i].x, xyarr[i].y)
+
+							}
+
+							ctx.closePath();
+
+						}
+
+						for (var i = 0; i <	xyarr.length; i++) {
+
+							drawCirc(xyarr[i].x, xyarr[i].y)
+
+						}
+
+						ctx.closePath();
+		}
+
+
+				
+				
+			function startRec(){
+			canvas =  document.getElementById('myCanvas');
+			ctx = canvas.getContext('2d');
+			document.getElementById('play').disabled = false;
+			document.getElementById('start').disabled = true;
+				
+					canvas.onmousemove = function(e) {
+						var coords = getMouseCoords(e);
+						var x = coords[0];
+						var y = coords[1];
+						drawLines();
+						
+						ctx.clear;
+						drawCirc(x, y);
+						document.getElementById('play').disabled = false;
+			document.getElementById('start').disabled = false;
+
+					};
+
+
+				canvas.onclick = function(e) {
+
+
+
+					var coords = getMouseCoords(e);
+					
+						var currx = coords[0];
+						var curry = coords[1];
+						var text = document.getElementById('inputCaption').value;
+						
+						xyarr.push(
+							{
+								x: currx,
+								y: curry,
+								label: text
+							}
+						);
+
+
+						//console.log(xyarr);
+						document.getElementById('play').disabled = true;
+						document.getElementById('start').disabled = true;
+
+					showWindow();
+				};
+
+				
+				
+				
+				
+				//hideWindow();
+			}
+
+			function drawCirc(x, y) {
+						ctx.beginPath();
+						ctx.moveTo(x, y)
+						ctx.arc(x, y, 8, 0, 2 * Math.PI);
+						ctx.closePath();
+						ctx.fillStyle = "red";
+						ctx.fill();
+
+					}
+			
+
+			function drawLine(x, y) {
+
+					ctx.lineTo(x, y);
+					ctx.stroke();
+					
+					
+
+			}
+
+
+
+
+			function showWindow(){
+
+			document.getElementById('outer').style.display='block';
+			document.getElementById('inputCaption').focus();
+			
+			
+			//document.getElementById('play').disabled = false;
+			//document.getElementById('start').disabled = false;
+
+			}
+
+
+				//window.onload = hideWindow;
+
+
+
+			function addtd(){
+
+				var table1 = document.getElementsByTagName('table')[0];
+				
+				
+
+				table1.innerHTML="";
+				
+
+				for ( i=0; i <xyarr.length; i++) {
+
+					var row1 =  document.createElement('tr');
+
+					var cell5  =  document.createElement('td');
+					var myUpButton = document.createElement('button');
+					var type='button';
+					var upTextButton = document.createTextNode('Up');
+					myUpButton.value='Up';
+					myUpButton.setAttribute('button', type);
+					
+					myUpButton.onclick = insertBefore;
+
+					
+					myUpButton.appendChild(upTextButton);
+					cell5.appendChild(myUpButton);
+					row1.appendChild(cell5);
+					
+					
+					var cell6  =  document.createElement('td');
+					var downButton = document.createElement('button');
+					var type='button';
+					var downTextButton = document.createTextNode('Down');
+					downButton.value='Down';
+					downButton.setAttribute('button', type);
+					
+					downButton.onclick = moveDown;
+					
+					
+					//downButton.onclick = function() { 
+						//alert('Alert Move Down Clicked');
+					//};
+					
+					
+					downButton.appendChild(downTextButton);
+					cell6.appendChild(downButton);
+					row1.appendChild(cell6);
+					
+					
+					var cell1  =  document.createElement('td');
+					cell1.innerHTML= "Label: <input value=" + xyarr[i].label +"> </input>";
+					row1.appendChild(cell1);
+					
+					
+
+					var cell2  =  document.createElement('td');
+					cell2.innerHTML= ("Y: <span> " +xyarr[i].y + "</span>" );
+					row1.appendChild(cell2);
+
+					var cell3  =  document.createElement('td');
+					cell3.innerHTML= ("X: <span> "+ xyarr[i].x +"</span>" );
+					row1.appendChild(cell3);
+					
+					
+					
+					var cell4  =  document.createElement('td');
+					var deleteButton = document.createElement('button');
+					var type='button';
+					var downTextButton2 = document.createTextNode('Delete');
+					deleteButton.value='Down';
+					deleteButton.setAttribute('button', type);
+					deleteButton.onclick = deleteRow;
+					
+					/*
+					deleteButton.onclick = function() { 
+						alert('Alert Delete Clicked');
+					};
+					*/
+					
+					
+					deleteButton.appendChild(downTextButton2);
+					cell4.appendChild(deleteButton);
+					row1.appendChild(cell4);
+					
+					
+					table1.appendChild(row1);
+					
+					
+				}
+							
+			}
+			
+			
+			
+			
+			function insertBefore(){
+							var rowToMove = this.parentNode.parentNode;
+							var target = rowToMove.previousSibling;
+							var parentReference = rowToMove.parentNode;
+							parentReference.insertBefore(rowToMove, target);
+							makeChange()
+							}
+											
+			function deleteRow(){
+							var rowToDelete = this.parentNode.parentNode
+							var parentReference = rowToDelete.parentNode;
+							parentReference.removeChild(rowToDelete);
+							makeChange()
+					}
+			
+			
+			function moveDown(){
+							var rowBackMove = this.parentNode.parentNode;
+							var target = rowBackMove.nextSibling.nextSibling;
+							var parentReference = rowBackMove.parentNode;
+							parentReference.insertBefore( rowBackMove, target);
+							makeChange()
+			}
+			
+			
+			
+			
+			function makeChange(){
+					xyarr = [];
+					
+					
+					var table2 = document.getElementsByTagName('table')[0];
+					
+					var trs = table2.getElementsByTagName("tr");
+					 
+					 for (i=0; i < trs.length; i++){
+					 
+						 var tds = trs[i].getElementsByTagName('td');
+						 
+						 sp = tds[2].getElementsByTagName('input')[0];
+						 mylabel = sp.value;
+						
+						sp = tds[3].getElementsByTagName('span')[0];
+						 myY = sp.innerHTML;
+						
+						sp = tds[4].getElementsByTagName('span')[0];
+						 myX = sp.innerHTML;
+						
+						
+						xyarr.push ({label: mylabel, y: myY, x: myX});
+						
+												
+						 console.log(xyarr);
+					 }
+					 
+					 
+					drawLines();
+					
+			}
+			
+			
+			
+			function hideWindow(){
+			
+			document.getElementById('outer').style.display='none';
+			var inputLabel = document.getElementById('inputCaption').value;
+			xyarr[xyarr.length-1].label = inputLabel;
+			
+			addtd();
+			
+			}
+			
+			
+				
+				
+			/*
+			var count = 0;
+			
+			function play() {
+			
+			
+			
+				var playArr =[];
+				
+				playArr = xyarr;
+				console.log(xyarr);
+				console.log(playArr);
+					 //var i=0;
+					 
+						 if(  count <= playArr){
+						 
+						 //var myVar = setInterval(function(){ play() }, 1000);
+						 
+						 setInterval(play,1000);
+						 //drawLine(playArr[i].x, playArr[i].y);
+								//console.log(playArr);
+								
+									
+						}
+						
+						
+						count+=1;
+						console.log(count);
+						
+						if(count == playArr.length ){
+							//clearInterval(play);
+						}
+					 
+					
+						//ctx.clearRect(0,0,canvas.scrollWidth, canvas.scrollHeight);
+						//drawLines();
+						
+	
+	
+				}
+				
+				function myStopFunction() {
+					clearInterval(myVar);
+				}
+
+					
+			*/
+
+
+			//window.onload = hideWindow;
+			window.onload = init;
+
+</script>
+
+</head>
+
+<body>
+	<div id = "content">
+
+		<h1>Annotated Map Tool</h1>
+
+		<div id="main">
+
+			<canvas id="myCanvas" width="600" height="479" onclick="showWindow()"><p>Canvas is not supported by this browser.</p></canvas>
+
+			<div id="outer" >
+				<div id="PopUpBox" >
+					<input id="inputCaption" type="text" placeholder="Enter marker label:"/><br />
+					
+					<button type="button" onclick="hideWindow()">Save</button>
+				</div>
+			</div>
+			
+		</div>
+
+
+
+
+			<p>  <button   id="start"  type="button" "">Start the Recording</button> <button  id="play"  type="button" onclick="play();">Play</button>
+
+
+		<table cellspacing = "1">
+			<tr><th>Move</th><th>Name/Coords</th><th>Delete</th></tr>
+
+		</table>
+	</div>
+	<!--
+
+-->
+
+</body>
+</html>

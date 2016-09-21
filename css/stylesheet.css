@@ -1,0 +1,104 @@
+
+
+body, input{
+	background-color:rgb(205, 202, 202);
+	font-family: Arial, Helvetica, sans-serif;
+	color:rgb(51, 51, 51);
+}
+
+#content{
+	width:70%;
+	margin:auto;
+	.background-color:rgb(205, 202, 202);
+}
+
+#main{
+	position:relative;
+	width:600px;
+	height:480px;
+	border:2px solid rgb(204, 204, 204);
+	-webkit-border-radius:3px;
+	-moz-border-radius:3px;
+	border-radius:3px;
+}
+
+#myCanvas{
+	background:url(../image/cit-map-med.jpg);
+}
+
+#outer{
+	position:absolute;
+	background:rgba(0,0,0,0.7);
+	width:100%;
+	height:100%;
+	top:0px;
+	left:0px;
+	display:none;
+}
+
+#PopUpBox{
+	position:absolute;
+	top:50%;
+	left:50%;
+	-webkit-transform:translate(-50%,-50%);
+	-moz-transform:translate(-50%,-50%);
+	transform:translate(-50%,-50%);
+	text-align:center;
+	background:rgb(176, 175, 175);
+	width:260px;
+	height:140px;
+	border:2px solid rgb(0, 0, 0);
+	-webkit-border-radius:20px;
+	-moz-border-radius:20px;
+	border-radius:20px;
+}
+
+
+#inputCaption{
+	text-align:center;
+	width:150px;
+	height:40px;
+	background:rgb(239, 239, 239);
+	margin:30px auto;
+	display:inline-block;
+	border:3px solid rgb(217, 217, 217);
+	-webkit-border-radius:8px;
+	-moz-border-radius:8px;
+	border-radius:8px;
+	padding-top:5px;
+}
+
+
+
+table{
+
+	min-width:602px;
+	color:rgb(0, 0, 0);
+	background:rgb(179, 179, 179);
+	border:2px solid rgb(217, 217, 217);
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+	border-radius:3px;
+	text-align:left;
+	vertical-align:middle;
+	
+}
+
+tr{
+	height:40px;
+}
+
+td{
+	border-top:2px solid rgb(204, 204, 204);
+}
+
+th{
+	padding-left:0.5em;
+}
+
+
+td:nth-child(2){
+	padding-left:0.5em;
+}
+
+
